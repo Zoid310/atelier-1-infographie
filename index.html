@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+</head>
+
+<body>
+    <script defer>
+        let months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        let sales = [6500, 5550, 4200, 4525, 2500, 1500, 500, 1000, 1750, 2300, 3700, 3500];
+
+
+        function drawBarChart(data, labels) {
+            // Create an SVG element
+            const svg = SVG().addTo('body').size(1000, 1000);
+
+            svg.viewbox(0, 0, 1000, 1000);
+
+            // Make a wrapper for the chart
+            const chart = svg.group().attr({ id: 'chart' });
+
+            // Calculate the maximum value in the data array
+            const maxValue = 7000;
+
+            // Set the bar width and height
+            const barWidth = 40;
+            const barHeight = 400;
+
+            // Calculate the number of bars to draw
+            const numBars = data.length;
+
+
+            // Draw the title centered above the chart
+            chart.text('Ventes 2022')
+                .fill('#000000')
+                .font({ size: 20 })
+                .move((barWidth + 10) * numBars / 2 - 50, -50);
+
+
+
+            // Draw a black line at the bottom of the bars
+            chart.line(0, barHeight, (barWidth + 10) * numBars, barHeight)
+                .stroke({ color: '#000000', width: 2 });
+
+            // On the left side of the chart, draw a gray value line every 100 and a black line every 1000
+            for (let i = 0; i <= maxValue; i += 100) {
+                // Calculate the y position of the line
+                let y = barHeight - (i / maxValue) * barHeight;
+
+                // If the value is a multiple of 1000, draw a black line
+                if (i % 1000 === 0) {
+                    chart.line(0, y, (barWidth + 10) * numBars, y)
+                        .stroke({ color: '#000000', width: 2 });
+                }
+                // Otherwise, draw a gray line
+                else {
+                    chart.line(0, y, (barWidth + 10) * numBars, y)
+                        .stroke({ color: '#cccccc', width: 1 });
+                }
+
+                // Draw the value label if it's a multiple of 1000
+                if (i % 1000 === 0) {
+                    chart.text("$ " + i.toString())
+                        .fill('#000000')
+                        .font({ size: 12 })
+                        .move(-50, y - 10);
+                }
+            }
+
+            // Loop through the data array to draw each bar
+            for (let i = 0; i < numBars; i++) {
+                // Calculate the bar's height and position
+                let barHeightScaled = (data[i] / maxValue) * barHeight;
+                let barX = i * barWidth;
+                let barY = barHeight - barHeightScaled;
+                let color = '#fff';
+
+                // If data value is below 1500, change the bar color to red
+                if (data[i] < 1500) {
+                    color = '#e74c3c';
+                }
+                // If data value is below 3000, change the bar color to dark orange
+                else if (data[i] < 3000) {
+                    color = '#e67e22';
+                }
+                // If data value is below 4500, change the bar color to a lighter yellow
+                else if (data[i] < 4500) {
+                    color = '#f1c40f';
+                }
+                // Else, change the bar color to green
+                else {
+                    color = '#2ecc71';
+                }
+
+                // Add spacing between each bar
+                barX += 10 * (i + 1);
+
+                // Add a black border to the bar
+                chart.rect(barWidth, barHeightScaled)
+                    .fill('none')
+                    .stroke({ color: '#000000', width: 2 })
+                    .move(barX, barY);
+
+                // Draw the bar
+                chart.rect(barWidth, barHeightScaled)
+                    .fill(color)
+                    .move(barX, barY);
+
+                // Draw the value label above the bar
+                chart.text("$ " + data[i].toString())
+                    .fill('#000000')
+                    .font({ size: 12 })
+                    .move(barX + 5, barY - 20);
+
+
+                // Draw the label for the bar at the bottom and angled at 45 degrees
+                chart.text(labels[i])
+                    .fill('#000000')
+                    .font({ size: 12 })
+                    .move(barX + 20, barHeight)
+                    .rotate(45, barX, barHeight + 10);
+
+            }
+        }
+        drawBarChart(sales, months);
+
+        // Move the group 'chart' to the right and down
+        document.querySelector('#chart').setAttribute('transform', 'translate(100, 100)');
+
+        // move the bar chart to the right and down
+        document.querySelector('svg').setAttribute('transform', 'translate(100, 100)');
+    </script>
+</body>
+
+</html>
