@@ -12,7 +12,6 @@
 
 
         function drawBarChart(data, labels) {
-            // Create an SVG element
             const svg = SVG().addTo('body').size(1000, 1000);
 
             svg.viewbox(0, 0, 1000, 1000);
@@ -20,14 +19,11 @@
             // Make a wrapper for the chart
             const chart = svg.group().attr({ id: 'chart' });
 
-            // Calculate the maximum value in the data array
             const maxValue = 7000;
 
-            // Set the bar width and height
             const barWidth = 40;
             const barHeight = 400;
 
-            // Calculate the number of bars to draw
             const numBars = data.length;
 
 
