@@ -14,3 +14,5 @@ app.listen(port, () => {            //server starts listening for any attempts f
 
 app.use(express.static('public')); //serve static files from the public folder
 
+//sdfghjkjgfghjk
+
